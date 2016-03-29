@@ -5,7 +5,7 @@ angular.module('glimpse')
 
         atomsFactory.atoms = [];
         atomsFactory.pullAtoms = function (callback) {
-            $resource("http://localhost:8000/test_jsons/atoms.json").get(function (data) {
+            $resource("http://localhost:5000/api/v1.1/atoms").get(function (data) {
                 atomsFactory.atoms = data.result.atoms;
                 if (typeof callback === "function") callback();
             });

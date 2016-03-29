@@ -21,7 +21,7 @@ angular.module('glimpse')
                 element[0].innerHTML = "";
                 // Get processed nodes and links
                 var graph = processAtoms(atoms);
-
+                console.log(graph)
                 var svg = d3.select(element[0])
                     .append("svg:svg")
                     .attr("width", scope.settings.size.width).attr("height", scope.settings.size.height)
@@ -39,15 +39,19 @@ angular.module('glimpse')
                 force.nodes(graph.nodes).links(graph.links).start();
                 update(scope.settings);
 
-                var link = svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link");
-                var node = svg.selectAll(".node").data(graph.nodes).enter().append("g").attr("class", "node")
+                var link = svg.selectAll(".link").data(graph.links).enter().append("line").attr("class", "link").attr('id', function(d){ return 'line'+d.source.id+'-'+d.target.id});
+                var node = svg.selectAll(".node").data(graph.nodes).enter().append("g").attr('id', function(d){ return 'node'+d.id}).attr("class", function(d){
+                    return d.collapsed > 0 ? "node collapsed" : "node";
+                })
                     .call(force.drag().on("dragstart", function (d) {
                         if (scope.tool == 'pan_zoom') d3.event.sourceEvent.stopPropagation();
                     }));
+
                 node.append("circle").attr("r", function (d) {
                     return isLink(d) ? 4 : 12;
                 });
-                node.append("text").attr("dx", 10).attr("dy", ".35em").text(function (d) {
+
+                node.append("text").attr("dx", 10).attr("dy", ".35em").attr('id', function(d){ return 'txt'+d.id}).text(function (d) {
                     return isLink(d) ? d.type : d.label;
                 });
 
@@ -68,6 +72,12 @@ angular.module('glimpse')
                     }
 
                     scope.$apply();
+                });
+                
+                node.on('dblclick', function(sender){                    
+                    //var node = findById(graph.nodes, sender.id);
+                    graph = removeNodes(graph, sender.id)
+                    console.log(graph)
                 });
 
                 force.on("tick", function () {
@@ -100,6 +110,9 @@ angular.module('glimpse')
         return {
             link: linkDirective,
             restrict: 'E',
-            scope: {atoms: '=', settings: '=', selectedIndices: '=', tool: '='}
+            scope: {atoms: '=', settings: '=', selectedIndices: '=', tool: '='},
+            controller: function($scope, AtomsFactory){
+
+            }
         }
     });

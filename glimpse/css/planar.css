@@ -33,6 +33,7 @@ planar-view svg {
     font-weight: bold;
 }
 
+
 .node_selected circle {
     stroke-opacity: .9;
     fill: #fcbe28;
@@ -51,6 +52,21 @@ planar-view svg {
 
 .node_selected:hover text {
     font-weight: bold;
+}
+
+.collapsed circle {
+    stroke: #424242;
+    stroke-opacity: 1;
+    fill: #28b6ca;
+    stroke-width: 4px;
+    cursor: pointer;
+}
+
+.collapsed:hover circle {
+    stroke-opacity: 1;
+    fill: #28b6ca;
+    stroke-width: 4px;
+    cursor: pointer;
 }
 
 .link {
