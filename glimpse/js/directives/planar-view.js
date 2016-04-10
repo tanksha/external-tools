@@ -76,7 +76,7 @@ angular.module('glimpse')
                 
                 node.on('dblclick', function(sender){                    
                     //var node = findById(graph.nodes, sender.id);
-                    graph = removeNodes(graph, sender.id)
+                    graph = removeNodes(graph, sender.id, undefined, 1)
                     console.log(graph)
                 });
 

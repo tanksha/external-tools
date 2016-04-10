@@ -23,46 +23,74 @@ var findById = function(nodes, id){
     });
 }
 
-var removeNodes = function(graph, id, depth){ /* polymorphic recursive function.. */
-      depth = depth || 1;
-      var node = findById(graph.nodes, id)[0]
+var removeNodes = function(graph, idc, idp, depth){ /* polymorphic recursive function.. */
+      if(depth == undefined)
+        depth = 1
+      idp = idp || undefined
+      var nodec = findById(graph.nodes, idc)[0]
+      var nodep = findById(graph.nodes, idp)[0]
       /*if depth is defined it will use it or it just removes one node at a time*/
-      if(node){ 
-          if(node.incoming.length + node.outgoing.length != 0){
-                var max = node.outgoing.length                    
-                if(node.incoming.length > node.outgoing.length)
-                    max = node.incoming.length
+      if(nodec){ 
+          if(nodec.incoming.length + nodec.outgoing.length != 0){
+            if(depth > 0){
+                var max = nodec.outgoing.length
+                if(nodec.incoming.length > nodec.outgoing.length)
+                    max = nodec.incoming.length
                 for(var i=0; i < max; i++){ /* single loop for better performance ... */
-                    if(node.outgoing[i] != undefined && node.outgoing.length != 0){  
-                       if(depth > 0)
-                            graph = removeNodes(graph, node.incoming[i], isNode(node) ? depth - 1 : depth) 
-                        /*each copy of graph varriable will be distroyed after exiting of the function
-                         * we will not consider a link as node so if the node is a link we will note do any change to depth param
-                        */
-                       var n = findById(graph.nodes, node.outgoing[i])[0]
-                       graph.nodes.splice(graph.nodes.indexOf(n), 1)                        
-                       graph.collapsedNodes.push(n)
-                       if(isLink(node)){ /* links should be updated along sinde with the removal of nodes*/
-                            var link = graph.links.splice(graph.links.indexOf({source:node, target:n, label:node.label}))
-                            graph.collapsedLinks.push(link)
-                       }                                    
+                    if(nodec.outgoing.length != 0 && nodec.outgoing[i] != undefined){
+                        if((idp != undefined && idp != nodec.outgoing[i]) || idp == undefined){
+                            var nodenx = findById(graph.nodes, nodec.outgoing[i])[0]
+                            console.log("depth of next node is ", isNode(nodenx) ? depth - 1 : depth)
+                            console.log("depth ", depth)
+                            var z = isNode(nodenx) ? depth - 1 : depth
+                            graph = removeNodes(graph, nodec.outgoing[i], nodec.id, z)
+                            
+                        }
+                        
+                    }   
+                    if(nodec.incoming.length != 0 && nodec.incoming[i] != undefined ){
+                        if((idp != undefined && idp != nodec.incoming[i]) || idp == undefined){
+                            var nodenx = findById(graph.nodes, nodec.incoming[i])[0]
+                            console.log("depth of next node is ", isNode(nodenx) ? depth -1 : depth)
+                            console.log("depth ", depth)
+                            var z = isNode(nodenx) ? depth - 1 : depth
+                            graph = removeNodes(graph, nodec.incoming[i], nodec.id, z)
+                           
+                        }
+                        
+                    }                                                                             
+                }
+                if(nodep){
+                    graph.nodes.splice(graph.nodes.indexOf(nodec), 1)
+                    if(nodep.outgoing.indexOf(nodec.id)){
+                         graph.links.splice(graph.links.indexOf({source:nodep, target:nodec, label:nodep.label}), 1)
+                    }else{
+                         graph.links.splice(graph.links.indexOf({source:nodec, target:nodep, label:nodec.label}), 1)
                     }
-                    if(node.incoming[i] != undefined && node.incoming.length != 0){
-                        if(depth > 0)
-                            graph = removeNodes(graph, node.incoming[i], isNode(node) ? depth - 1 : depth)
-                        var n = findById(graph.nodes, node.outgoing[i])[0]
-                        graph.nodes.splice(graph.nodes.indexOf(n), 1) 
-                        graph.collapsedNodes.push(n) 
-                        if(isLink(node)){
-                            var link = graph.links.splice(graph.links.indexOf({source:node, target:n, label:node.label}))
-                            graph.collapsedLinks.push(link)
-                        }                              
-                    }  
-                                           
-                }                
+                }
+
+            }else if(depth == 0){
+                if(nodec.incoming.length + nodec.outgoing.length > 1){
+                    if(nodep){
+                        graph.nodes.splice(graph.nodes.indexOf(nodec), 1)
+                             graph.links.splice(graph.links.indexOf({source:nodep, target:nodec, label:nodep.label}), 1)
+                        
+                             graph.links.splice(graph.links.indexOf({source:nodec, target:nodep, label:nodec.label}), 1)
+                        
+                    }
+                }else{
+                    
+                     graph.links.splice(graph.links.indexOf({source:nodep, target:nodec, label:nodep.label}), 1)
+                
+                     graph.links.splice(graph.links.indexOf({source:nodec, target:nodep, label:nodec.label}), 1)
+                    
+                }
+            }
+                            
           }                                  
-        }
-        return graph; /* returns graph object for the next recursion */
+      }
+      console.log(graph)
+      return graph; /* returns graph object for the next recursion */
 }
 
 var findLinksByHandle = function(linkHandles, atoms){
