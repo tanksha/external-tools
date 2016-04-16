@@ -60,6 +60,23 @@ angular.module('glimpse')
             });
         };
 
+
+        atomsFactory.updateAtomsFromJSON = function (successCB, json_file) {
+            $http({
+                method: 'GET',
+                url: json_file,
+                cache: false
+            }).then(
+                function (response) {
+                    atomsFactory.atoms = response.data.result.atoms;
+                    atomsFactory.atomsCount = response.data.result.total;
+                    if (typeof successCB === "function") successCB();
+                },
+                function (error) {
+                }
+            );
+        };
+
         return atomsFactory;
     })
 

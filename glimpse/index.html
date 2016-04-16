@@ -28,7 +28,7 @@
 
     <script type="application/javascript" src="libs/d3/d3.min.js"></script>
 
-    <title>Glimpse - Atomspace Viewer</title>
+    <title>Glimpse - Atomspace Viewer (Presentation)</title>
 </head>
 
 <body ng-controller="mainCtrl">
@@ -83,6 +83,17 @@
                     <li><a href="" ng-click="showPanel('filters')">Filters</a></li>
                 </ul>
 
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Load<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/index.html?d=moses">MOSES/PLN</a></li>
+                    <li><a href="/index.html?d=bio_inference">Bio-inference</a></li>
+                    <li><a href="/index.html?d=sentence">Sentence</a></li>
+                    <li><a href="/index.html?d=smokes_inference">Smokes inference</a></li>
+                    <li><a href="/index.html?d=noisy_smokes_inference">Noisy smokes inference</a></li>
+                    <li><a href="/index.html?d=behaviour_tree">Behaviour tree</a></li>
+                </ul>
             </li>
             <li><a href="#">Help</a></li>
         </ul>
@@ -151,7 +162,7 @@
 </div>
 <!--Settings-->
 <div id="settings_panel" caption="Planar Settings" icon="">
-    <planar-settings settings="settings.planar"></planar-settings>
+    <planarstar-settings settings="settings.planar"></planar-settings>
 </div>
 
 <!--Add -->

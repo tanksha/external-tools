@@ -71,6 +71,22 @@ angular.module('glimpse').factory('utils', function () {
         return graph;
     };
 
+
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
     return {
         isNode: isNode,
         isLink: isLink,
@@ -78,7 +94,8 @@ angular.module('glimpse').factory('utils', function () {
         indexOfLink: indexOfLink,
         getAtomByHandle: getAtomByHandle,
         indexAtoms: indexAtoms,
-        atoms2Graph: atoms2Graph
+        atoms2Graph: atoms2Graph,
+        getUrlParameter: getUrlParameter
     }
 });
 

@@ -1,10 +1,6 @@
 var glimpse = angular.module("glimpse", ["ngResource", "ngAnimate", "vAccordion"]);
 
-glimpse.controller("mainCtrl", function ($rootScope, $scope, $window, $timeout, AtomsFactory) {
-
-    $scope.$on('$viewContentLoaded', function () {
-        console.log("POW");
-    });
+glimpse.controller("mainCtrl", function ($rootScope, $scope, $window, $timeout, utils, AtomsFactory) {
 
     // Global vars
     var divDockManager, dockManager;
@@ -86,7 +82,7 @@ glimpse.controller("mainCtrl", function ($rootScope, $scope, $window, $timeout, 
         terminalNode = dockManager.dockDown(documentManagerNode, terminalPanel, 0.2);
         toolboxNode = dockManager.dockLeft(documentManagerNode, toolboxPanel);
         atomDetailsNode = dockManager.dockRight(documentManagerNode, atomDetailsPanel);
-        $scope.showPanel("connect");
+        //$scope.showPanel("connect");
         $scope.connectDialog = connectDialog;
         // Init frequently used DOM elements
         planarView1 = document.getElementById("planar-view-1");
@@ -136,4 +132,10 @@ glimpse.controller("mainCtrl", function ($rootScope, $scope, $window, $timeout, 
 
     $scope.selectedIndices = [];
     $scope.filter = [];
+
+
+    // Get "d"
+    AtomsFactory.updateAtomsFromJSON(function () {
+        $scope.atoms = AtomsFactory.atoms;
+    }, "test_jsons/" + utils.getUrlParameter("d") + ".json");
 });
