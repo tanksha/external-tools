@@ -113,10 +113,10 @@ angular.module('glimpse')
 
             // Update display whenever atoms change
             scope.$watch('atoms', function (atoms) {
-                atoms = utils.indexAtoms(atoms);
+                var _atoms = utils.indexAtoms(atoms);
+                _atoms = simplifications.simplify(_atoms, scope.settings.simplifications);
 
-                atoms = simplifications.simplify(atoms, scope.settings.simplifications);
-                var graph = utils.atoms2Graph(atoms);
+                var graph = utils.atoms2Graph(_atoms);
 
                 // Add new nodes and update existing ones
                 for (var i = 0; i < graph.nodes.length; i++) {
@@ -130,7 +130,7 @@ angular.module('glimpse')
                     }
                 }
 
-                // Remove nodes not in the updated atoms
+                // Remove nodes not in the updated _atoms
                 force.nodes(force.nodes().filter(function (n) {
                     return utils.indexOfNode(graph.nodes, n) > -1;
                 }));
@@ -155,7 +155,8 @@ angular.module('glimpse')
                 // Remove links...
                 force.links(force.links().filter(function (n) {
                     for (var i = 0; i < graph.edges.length; i++) {
-                        if (graph.edges[i].source == n.source.handle && graph.edges[i].target == n.target.handle) return true;
+                        if (n.source && n.target)
+                            if (graph.edges[i].source == n.source.handle && graph.edges[i].target == n.target.handle) return true;
                     }
                     return false;
                 }));

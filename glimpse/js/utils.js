@@ -21,7 +21,8 @@ angular.module('glimpse').factory('utils', function () {
 
     var indexOfLink = function (haystack, needle) {
         for (var i = 0; i < haystack.length; i++) {
-            if (haystack[i].source.handle == needle.source && haystack[i].target.handle == needle.target) return i;
+            if (haystack[i].source && haystack[i].target)
+                if (haystack[i].source.handle == needle.source && haystack[i].target.handle == needle.target) return i;
         }
         return -1;
     };
@@ -42,8 +43,8 @@ angular.module('glimpse').factory('utils', function () {
                 handle: atom["handle"],
                 label: atom["name"] || atom["type"],
                 type: atom["type"],
-                incoming: atom["incoming"],
-                outgoing: atom["outgoing"],
+                incoming: atom["incoming"].slice(),
+                outgoing: atom["outgoing"].slice(),
                 outgoing_labels: [],
                 outgoing_arrows: [],
                 isNode: isNode(atom),

@@ -82,7 +82,10 @@ glimpse.controller("mainCtrl", function ($rootScope, $scope, $window, $timeout, 
         terminalNode = dockManager.dockDown(documentManagerNode, terminalPanel, 0.2);
         toolboxNode = dockManager.dockLeft(documentManagerNode, toolboxPanel);
         atomDetailsNode = dockManager.dockRight(documentManagerNode, atomDetailsPanel);
-        //$scope.showPanel("connect");
+
+        if (!utils.getUrlParameter("d"))
+            $scope.showPanel("connect");
+
         $scope.connectDialog = connectDialog;
         // Init frequently used DOM elements
         planarView1 = document.getElementById("planar-view-1");
