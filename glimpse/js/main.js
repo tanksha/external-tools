@@ -138,7 +138,8 @@ glimpse.controller("mainCtrl", function ($rootScope, $scope, $window, $timeout, 
 
 
     // Get "d"
-    AtomsFactory.updateAtomsFromJSON(function () {
-        $scope.atoms = AtomsFactory.atoms;
-    }, "test_jsons/" + utils.getUrlParameter("d") + ".json");
+    if (utils.getUrlParameter("d"))
+        AtomsFactory.updateAtomsFromJSON(function () {
+            $scope.atoms = AtomsFactory.atoms;
+        }, "test_jsons/" + utils.getUrlParameter("d") + ".json");
 });
