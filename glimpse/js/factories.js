@@ -26,6 +26,7 @@ angular.module('glimpse')
                 }
             );
         };
+        
         atomsFactory.setServer = function (s) {
             atomsFactory.server = s;
         };

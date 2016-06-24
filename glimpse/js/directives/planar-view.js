@@ -141,6 +141,8 @@ angular.module('glimpse')
                     return utils.indexOfNode(graph.nodes, n) > -1;
                 }));
 
+
+
                 // Add new links and update existing ones
                 for (i = 0; i < graph.edges.length; i++) {
                     var linkIndex = utils.indexOfLink(force.links(), graph.edges[i]);
@@ -212,7 +214,17 @@ angular.module('glimpse')
                 });
 
                 node.append("text").attr("dx", 16).attr("dy", ".35em");
+
+                node.on("dblclick", function(sender){
+                    sender.px = 0;
+                    sender.py = 0;
+                    console.log();
+                    console.log(sender);
+                    
+                });
+
                 node.on("click", function (sender) {
+                   
                     if (scope.tool == 'select' || scope.tool == 'focus') {
                         if (d3.event.shiftKey || d3.event.ctrlKey) {
                             if (scope.selectedHandles.indexOf(sender.handle) == -1)
@@ -226,9 +238,12 @@ angular.module('glimpse')
                             return scope.selectedHandles.indexOf(d.handle) == -1 ? "node" : "node node_selected";
                         });
                     }
+
                     if (scope.tool == 'anchor') {
                         sender.fixed = !d3.event.altKey;
                     }
+
+
                     if (scope.tool == 'focus') {
                         var nodeHandlesToShow = [sender["handle"]];
 
@@ -252,6 +267,11 @@ angular.module('glimpse')
 
                         });
                     }
+
+                    if(scope.tool == 'center'){
+                         svg_g.transition().attr("transform", "translate(" + ((Number(sender.x)>0? -1*Number(sender.x) : Number(sender.x)) + scope.settings.size.width/2).toString() +","+ ((Number(sender.y)>0? -1*Number(sender.y) : Number(sender.y))+scope.settings.size.height/2).toString() + ")" );
+                    }
+                    
                     scope.$apply();
                 });
 

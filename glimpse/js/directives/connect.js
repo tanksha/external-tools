@@ -13,6 +13,8 @@ angular.module('glimpse')
 
                 var onSuccess = function () {
                     scope.atoms = AtomsFactory.atoms;
+                    console.log("atoms recived");
+                    console.log(scope.atoms);
                     scope.state = "message";
                     scope.message = "Successfully fetched " + AtomsFactory.atomsCount + " atoms.";
                     scope.message_class = "success";
